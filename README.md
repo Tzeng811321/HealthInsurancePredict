@@ -137,7 +137,8 @@ flowchart TD
     %% SimilarProduct.py Module
     B --> C[SimilarProduct.py: 產品相似度分析];
     C --> D(從CSV讀取產品資料);
-    D --> E(使用OpenAI API 分析產品資料<br>(GPT-4o));
+    E(使用OpenAI API 分析產品資料<br>-GPT-4o-); %% <-- 修正了這裡的括號
+    D --> E;
     E --> F(產生並儲存JSON結果<br>SimilarProduct_Output.json);
 
     %% Assistant_api.py - 步驟 1
