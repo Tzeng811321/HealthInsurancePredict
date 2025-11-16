@@ -134,7 +134,7 @@ conda env remove -n medata_ui
 flowchart TD
     A[開始] --> B(載入環境變數 .env);
 
-    %% SimilarProduct.py Module
+   SimilarProduct.py Module
     B --> C[SimilarProduct.py: 產品相似度分析];
     C --> D(從CSV讀取產品資料);
     E(使用OpenAI API 分析產品資料<br>-GPT-4o-); %% <-- 修正了這裡的括號
@@ -153,7 +153,7 @@ flowchart TD
     L --> M(根據使用者問題搜尋相似內容);
     M --> N(使用ChatCompletion生成回答);
 
-    %% Assistant_api.py - 步驟 2 (最終輸出)
+   Assistant_api.py - 步驟 2 (最終輸出)
     N --> O[Assistant_api.py: 儲存結果];
     O --> P(將最終回答儲存為<br>final_answer.txt);
     P --> Q[結束];
