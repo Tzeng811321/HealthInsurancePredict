@@ -133,7 +133,6 @@ conda env remove -n medata_ui
 ```mermaid
 flowchart TD
     A[開始] --> B(載入環境變數 .env);
-
     %% SimilarProduct.py Module
     B --> C[SimilarProduct.py: 產品相似度分析];
     C --> D(從CSV讀取產品資料);
