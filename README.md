@@ -132,26 +132,27 @@ conda env remove -n medata_ui
 
 ```mermaid
 flowchart TD
-    A[開始] --> B(讀取 CSV 並建立 SQLite 資料庫<br>load_data_to_db);
-    B --> C(建立資料庫索引<br>create_index);
-    C --> D{使用者輸入產品名稱或關鍵字};
-    D --> E(進行模糊搜尋<br>fuzzy_search_product);
-    E --> F{有找到直接匹配結果?};
+    A[開始] --> B(載入環境變數 .env);
 
-    %% 流程 A: 直接匹配路徑
-    F -- Yes --> G(取得匹配產品);
-    G --> H(查詢相同功能類別產品<br>query_products_by_function);
-    H --> I(將結果分組 大小類，輸出結果);
-    I --> J(將結果存入 CSV 檔案<br>IndexSQL_find.csv);
-    J --> K[結束];
+    %% SimilarProduct.py Module
+    B --> C[SimilarProduct.py: 產品相似度分析];
+    C --> D(從CSV讀取產品資料);
+    D --> E(使用OpenAI API 分析產品資料<br>(GPT-4o));
+    E --> F(產生並儲存JSON結果<br>SimilarProduct_Output.json);
 
-    %% 流程 B: 無直接匹配路徑
-    F -- No --> L(進行模糊搜尋<br>fuzzywuzzy 模組);
-    L --> M{有找到模糊匹配結果<br>符合閾值?};
+    %% Assistant_api.py - 步驟 1
+    F --> G[Assistant_api.py: 準備資料];
+    G --> H(讀取JSON結果並整理產品列表);
+    H --> I(建立使用者問題);
 
-    %% 流程 B1: 模糊匹配路徑 (重用 H, I, J, K)
-    M -- Yes --> H; 
+    %% FileSearch.py Module
+    I --> J[FileSearch.py: 知識庫搜尋];
+    J --> K(載入並切割PDF為chunks);
+    K --> L(將chunks進行Embedding);
+    L --> M(根據使用者問題搜尋相似內容);
+    M --> N(使用ChatCompletion生成回答);
 
-    %% 流程 B2: 無匹配結果路徑
-    M -- No --> Q(顯示「找不到產品」訊息);
-    Q --> K;
+    %% Assistant_api.py - 步驟 2 (最終輸出)
+    N --> O[Assistant_api.py: 儲存結果];
+    O --> P(將最終回答儲存為<br>final_answer.txt);
+    P --> Q[結束];
